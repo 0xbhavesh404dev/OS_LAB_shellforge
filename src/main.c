@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 int main(void) {
 char *line = NULL;
 size_t len = 0;
@@ -19,6 +21,14 @@ token = strtok(NULL, " \t");
 args[i] = NULL;
 if (i == 0) continue;
 if (strcmp(args[0], "exit") == 0) break;
+pid_t pid = fork();
+if (pid == 0) {
+execvp(args[0], args);
+perror("Execution error");
+exit(1);
+} else {
+waitpid(pid, NULL, 0);
+}
 }
 free(line);
 return 0;
