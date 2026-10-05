@@ -21,6 +21,14 @@ token = strtok(NULL, " \t");
 args[i] = NULL;
 if (i == 0) continue;
 if (strcmp(args[0], "exit") == 0) break;
+if (strcmp(args[0], "cd") == 0) {
+if (args[1] == NULL) {
+perror("shellforge: missing path parameter");
+} else if (chdir(args[1]) != 0) {
+perror("Directory change failed");
+}
+continue;
+}
 pid_t pid = fork();
 if (pid == 0) {
 execvp(args[0], args);
