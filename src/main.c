@@ -4,12 +4,21 @@
 int main(void) {
 char *line = NULL;
 size_t len = 0;
+char *args[64];
 while (1) {
 printf("shellforge$ ");
 fflush(stdout);
 if (getline(&line, &len, stdin) == -1) break;
 line[strcspn(line, "\n")] = '\0';
-if (strcmp(line, "exit") == 0) break;
+int i = 0;
+char *token = strtok(line, " \t");
+while (token != NULL && i < 63) {
+args[i++] = token;
+token = strtok(NULL, " \t");
+}
+args[i] = NULL;
+if (i == 0) continue;
+if (strcmp(args[0], "exit") == 0) break;
 }
 free(line);
 return 0;
